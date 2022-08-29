@@ -1,0 +1,11 @@
+FROM node:16.17.0
+
+# npm link needs permissions
+RUN chown -R node:node /usr/local/lib && \
+    chown -R node:node /root
+
+USER node
+
+WORKDIR ngx-library-template
+
+CMD ["/bin/sh", "-c", "npm install && npm run build:ngx-lib && cd dist/ngx-lib && npm link && cd ../.. && npm link ngx-lib && npm run build:lib:watch"]

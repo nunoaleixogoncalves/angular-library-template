@@ -1,0 +1,65 @@
+version: "3.6"
+
+networks:
+  traefik:
+    driver: bridge
+    name: ${TRAEFIK_NETWORK:-traefik_network}
+    ipam:
+      config:
+        - subnet: 10.10.10.0/24
+  internal:
+
+# IF THE 1nd service takes a while to be ready its ok!! is waiting for the build:watch of the library (2st service)
+services:
+  ## angular project to test and develop library (it restarts until first service is waiting/ready on watch)
+  ngx-template:
+    image: ngx-template:dev
+    build:
+      context: ./
+      dockerfile: ./ngx-library-template/Dockerfile
+    command:
+      - sh
+      - -c
+      - |
+        npm run start
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ngx-template.entrypoints=http"
+      - "traefik.http.routers.ngx-template.rule=PathPrefix(`/`) || PathPrefix(`/sockjs-node`)"
+      - "traefik.http.routers.ngx-template.service=ngx-template"
+      - "traefik.http.services.ngx-template.loadbalancer.server.port=4200"
+    depends_on:
+      - ngx-lib
+    networks:
+      - internal
+      - traefik
+    restart: always
+    volumes:
+      - ./ngx-library-template:/ngx-library-template
+
+  ## build library with watch to devevelopment
+  ngx-lib:
+    image: ngx-lib:dev
+    build:
+      context: ./
+      dockerfile: ./ngx-library-template/Dockerfile.build-lib
+    networks:
+      - internal
+    volumes:
+      - ./ngx-library-template:/ngx-library-template
+
+  traefik:
+    image: traefik:v2.2
+    command:
+      - --entrypoints.http.address=:80
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=${TRAEFIK_NETWORK:-traefik_network}
+    networks:
+      traefik:
+        ipv4_address: 10.10.10.15
+    ports:
+      - "80:80"
+    restart: on-failure:3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,13 @@
+<h1>EXAMPLE ngx-lib components</h1>
+
+<ngx-example [inputExample]="'my input text from main app'"></ngx-example>
+<br>
+<div ngxBackground [color]="'yellow'">div to test ngx background directive</div>
+<br>
+<button type="button" (click)="onClick()">test ngx-lib service function</button>
+<br>
+<img [src]="'/ngx-lib/assets/img/img-example.png'" alt="example img from assets of lib">
+<br>
+<img [src]="'https://image.shutterstock.com/image-illustration/explosion-pink-blue-powder-freeze-600w-1077184466.jpg' | ngxSafe:'resourceUrl'"
+    alt="example resource html with pipe from lib">
+<br>
