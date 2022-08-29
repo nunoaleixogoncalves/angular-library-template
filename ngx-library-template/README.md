@@ -15,6 +15,7 @@ go to <http://localhost>
 for develop without docker you have to:
 
 `sudo chown -R ${USER} /usr/local/lib`
+
 `sudo chown -R ${USER} /root`
 
 `cd ngx-library-template`
