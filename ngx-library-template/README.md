@@ -1,22 +1,28 @@
-# NgxLibraryTemplate
+# NGX library template - ngx-lib
 
-this is a template for the development of Angular libraries - ex. ngx-lib
+This is a template for the development of Angular libraries - ex. **ngx-lib**
 
-eslint & docker/traefik
+eslint & docker
 
-# DEVELOP with docker
+Angular.json has 2 projects one of type **library** and other of type **application** working together to develop and test your next angular library
 
-docker-compose up -d
+- **library** is your npm package where you have all the stuff for your angular library (located on folder projects/ngx-lib)
+- **application** consumes and uses your library in a real use case scenario for testing
+
+Uses **--watch** flag in npm build command (of the ngx-lib) and **npm link** to simulate your library as a npm dependency of the main project!
+putting the build folder of the library (dist/ngx-lib) into the node_modules as ngx-lib!
+
+## DEVELOP with docker
+
+`docker-compose up -d`
 
 go to <http://localhost>
 
-# DEVELOP without docker
+## DEVELOP without docker
 
-for develop without docker you have to:
+`sudo chown -R ${USER} /usr/local/lib` - just for linux and probably mac
 
-`sudo chown -R ${USER} /usr/local/lib`
-
-`sudo chown -R ${USER} /root`
+`sudo chown -R ${USER} /root` - just for linux and probably mac
 
 `cd ngx-library-template`
 
@@ -29,6 +35,25 @@ terminal 2:
 `npm run start`
 
 go to <http://localhost:4200>
+
+## ngx-lib examples/placeholders
+
+Examples on the ngx-lib:
+
+- Component - ExampleComponent
+- Directive - BackgroundDirective
+- Pipe - SafePipe
+- Service - UtilsService
+- SCSS - base.scss
+- Assets (img, js, css)
+
+these examples are a guideline so you can see how it works!
+
+Now you can delete all the components on the **projects/ngx-lib/src/lib** folder and create your own.
+
+To change the name of the library you can replace all of mentions of ngx-lib or just the package.json "name" entry (**projects/ngx-lib/package.json**)
+
+To publish your creation you can run `npm run publish:ngx-lib`
 
 # NgxLibraryTemplate
 
